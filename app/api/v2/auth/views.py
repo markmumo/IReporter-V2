@@ -1,10 +1,14 @@
 from flask import Flask
 from flask_restful import Resource, reqparse
+import datetime
 from flask_jwt_extended import create_access_token
 
 from app.api.v2.models.incidents import Incident
 from app.api.v2.models.users import User
 from utils.validators import Validate
+
+
+from werkzeug.security import check_password_hash
 
 
 class Sign_in(Resource):
@@ -17,15 +21,20 @@ class Sign_in(Resource):
         data = Sign_in.parser.parse_args()
         username = data['username']
         password = data['password']
-        user = User.get_user_by_username(username)
-        if user and User().check_password(password):
-            token = create_access_token(user.username)
-            return {
-                token: token,
-                "Message": f"{user.username} loggedin successfully"
-            }, 200
 
-        return {"Message": "Username not found"}, 404
+        user = User().get_user_by_username(username)
+
+        if not user:
+            return {'message': 'user not found'}, 404
+
+        if not check_password_hash(user.password, password):
+            return {'message': 'incorrect password'}, 401
+
+        expires = datetime.timedelta(minutes=30)
+        token = create_access_token(
+            identity=user.serialize(), expires_delta=expires)
+        return {'token': token, 'message': 'successfully logged'}, 200
+
 
 
 class Sign_up(Resource):
@@ -53,6 +62,9 @@ class Sign_up(Resource):
             return {"Message": "username can only contain alphanumeric characters only and a minimum of 4 characters"}, 400
         if not Validate.validate_phone_number(phoneNumber):
             return {"Message": "please put valid phone number"}, 400
+
+        if not Validate.validate_email(email):
+            return {"message": "Please enter valid email"}, 400
 
         if not Validate.validate_input_strings(firstname):
             return {"Message": "Please enter valid firstname"}, 400
