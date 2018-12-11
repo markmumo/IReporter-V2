@@ -29,7 +29,7 @@ class User(Irepoterdb):
                 othernames VARCHAR NOT NULL UNIQUE,
                 email VARCHAR NOT NULL UNIQUE,
                 password VARCHAR NOT NULL,
-                phoneNumber INTEGER NOT NULL UNIQUE,
+                phoneNumber VARCHAR NOT NULL UNIQUE,
                 username VARCHAR NOT NULL UNIQUE,
                 is_admin BOOLEAN NOT NULL
             )
@@ -86,26 +86,38 @@ class User(Irepoterdb):
             return self.objectify_user(user)
         return None
 
-    # def get_user_by_id(self, Id):
-    #     for user in Users:
-    #         if user.id == Id:
-    #             return user
+    def get_user_by_username(self, username):
+        '''fetch user by username'''
 
-    @staticmethod
-    def get_user_by_username(username):
-        for user in Users:
-            if user.username == username:
-                return user
+        cur = self.conn.cursor()
+        cur.execute('''SELECT * FROM users WHERE username=%s''',
+                    (username, ))
+        user = cur.fetchone()
+
+        self.conn.commit()
+        cur.close()
+
+        if user:
+            return self.objectify_user(user)
+        return None
 
     def get_user_by_email(self, email):
-        for user in Users:
-            if user.email == email:
-                return user
-            else:
-                return {"Message": "user does not exist"}, 404
+        '''fetch user by email'''
+
+        cur = self.conn.cursor()
+        cur.execute('''SELECT * FROM users WHERE email=%s''',
+                    (email, ))
+        user = cur.fetchone()
+
+        self.conn.commit()
+        cur.close()
+
+        if user:
+            return self.objectify_user(user)
+        return None
 
     def objectify_user(self, data):
-        '''this converts a tuple into an object'''
+        ''' maps user '''
 
         self.id = data[0]
         self.firstname = data[1]
