@@ -40,24 +40,28 @@ class PostIncidents(Resource):
         incident.add()
 
         return {"incident": "created successfully"}, 201
-    
+
 
 class AllIncidents(Resource):
 
-    """ GET all incident """
+    ''' GET all incidents '''
 
     def get(self):
+        incidents = Incident().get_all_incidents()
 
-        return {"Incidents": [Incident.serializer() for Incident in incidents]}, 200
+        if not incidents:
+            return {"message": "incidents not found"}, 404
+
+        return {"incidents": [incident.serializer() for incident in incidents]}, 200
 
 
 class Get_incident_by_id(Resource):
 
-    """ GET incident by id """
+    ''' GET incident by id '''
 
-    def get(self, id):
+    def get(self, incident_id):
 
-        incident = Incident().get_incident_by_id(id)
+        incident = Incident().get_by_id(incident_id)
 
         if not incident:
 
@@ -68,7 +72,7 @@ class Get_incident_by_id(Resource):
             return {"Incident": incident.serializer()}, 200
 
     def delete(self, id):
-        """" DELETE specific incident """
+        ''' delete specific incident '''
 
         delete_incident = Incident().get_incident_by_id(id)
         if not delete_incident:
@@ -82,7 +86,7 @@ class Get_incident_by_id(Resource):
             return {"Message": "Incident deleted successfully"}, 200
 
     def patch(self, id):
-        """ (PATCH) update specific incident """
+        ''' (PATCH) update specific incident '''
 
         data = PostIncidents.parser.parse_args()
 
