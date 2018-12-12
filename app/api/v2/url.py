@@ -9,7 +9,7 @@ def url(api):
     api.add_resource(AllIncidents, "/incident")
 
     """GET incident by id"""
-    api.add_resource(Get_incident_by_id, "/incident/<int:id>")
+    api.add_resource(Get_incident_by_id, "/incident/<int:incident_id>")
 
     """SignUp"""
     api.add_resource(Sign_up, '/auth/Sign_up')
