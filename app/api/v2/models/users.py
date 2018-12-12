@@ -87,7 +87,7 @@ class User(Irepoterdb):
         return None
 
     def get_user_by_username(self, username):
-        '''fetch user by username'''
+        '''get user by username'''
 
         cur = self.conn.cursor()
         cur.execute('''SELECT * FROM users WHERE username=%s''',
@@ -102,7 +102,7 @@ class User(Irepoterdb):
         return None
 
     def get_user_by_email(self, email):
-        '''fetch user by email'''
+        '''get user by email'''
 
         cur = self.conn.cursor()
         cur.execute('''SELECT * FROM users WHERE email=%s''',
