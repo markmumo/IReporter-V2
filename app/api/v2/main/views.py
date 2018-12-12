@@ -86,33 +86,26 @@ class Get_incident_by_id(Resource):
 
             return {"Message": "Incident deleted successfully"}, 200
 
-    def patch(self, id):
-        ''' (PATCH) update specific incident '''
+    def put(self, incident_id):
+        ''' (PUT) update specific incident '''
 
         data = PostIncidents.parser.parse_args()
 
-        created_by = data['created_by']
-        Type = data['Type']
-        location = data['location']
-        status = data['status']
-        image = data['image']
-        video = data['video']
-        comment = data['comment']
+        Type = data["Type"]
+        location = data["location"]
+        image = data["image"]
+        video = data["video"]
+        comment = data["comment"]
 
-        specific_incident = Incident().get_incident_by_id(id)
+        incidents = Incident().get_by_id(incident_id)
 
-        if not specific_incident:
+        if incidents.status != "draft":
+            return {"message": f"you status is {incidents.status} you can only edit an incident when status is \'draft' "}, 401
 
-            return {"message": "This incident does not exist"}, 404
+        incident = Incident(Type=Type, location=location,
+                            image=image, video=video, comment=comment)
 
-        else:
+        incident.update(incident_id)
+        return {"message": "incident updated successfully"}, 200
 
-            specific_incident.created_by = created_by
-            specific_incident.Type = Type
-            specific_incident.location = location
-            specific_incident.status = status
-            specific_incident.image = image
-            specific_incident.video = video
-            specific_incident.comment = comment
-
-            return {"Incident": specific_incident.serializer()}, 200
+        return {"message": "incident does not exist"}, 404
