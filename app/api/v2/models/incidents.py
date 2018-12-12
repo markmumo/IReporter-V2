@@ -86,7 +86,7 @@ class Incident(Irepoterdb):
         ''' get incident by id '''
         cur = self.conn.cursor()
         cur.execute(
-            "SELECT * FROM incidents where id = %s", (_id, ))
+            "SELECT * FROM incidents WHERE id = %s", (_id, ))
         incident = cur.fetchone()
 
         cur.close()
@@ -98,10 +98,19 @@ class Incident(Irepoterdb):
     def get_all_incidents(self):
         ''' get all incidents '''
         cur = self.conn.cursor()
-        cur.execute("SELECT * FROM incidents")
+        cur.execute(
+            "SELECT * FROM incidents")
         incidents = cur.fetchall()
         cur.close()
 
         if incidents:
             return (self.objectify_incident(incident) for incident in incidents)
             return None
+
+    def delete(self, incident_id):
+        """ delete incident """
+        cur = self.conn.cursor()
+        cur.execute(
+            "DELETE FROM incidents WHERE id = %s", (incident_id, ))
+        self.conn.commit()
+        cur.close()
