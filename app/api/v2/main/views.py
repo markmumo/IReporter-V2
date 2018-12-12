@@ -71,17 +71,18 @@ class Get_incident_by_id(Resource):
 
             return {"Incident": incident.serializer()}, 200
 
-    def delete(self, id):
+    def delete(self, incident_id):
         ''' delete specific incident '''
 
-        delete_incident = Incident().get_incident_by_id(id)
-        if not delete_incident:
+        incident = Incident().get_by_id(incident_id)
+
+        if not incident:
 
             return {"message": "incident does not exist"}, 404
 
         else:
 
-            incidents.remove(delete_incident)
+            incident.delete(incident_id)
 
             return {"Message": "Incident deleted successfully"}, 200
 
