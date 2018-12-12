@@ -114,3 +114,12 @@ class Incident(Irepoterdb):
             "DELETE FROM incidents WHERE id = %s", (incident_id, ))
         self.conn.commit()
         cur.close()
+
+    def update(self, incident_id):
+        """ edit an incident """
+        cur = self.conn.cursor()
+        cur.execute(
+            """ UPDATE incidents SET Type= %s, location= %s, image= %s, video= %s, comment= %s WHERE id = %s """, (
+                self.Type, self.location, self.image, self.video, self.comment, incident_id)
+        )
+        self.conn.commit()
