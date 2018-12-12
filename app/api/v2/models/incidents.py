@@ -1,4 +1,6 @@
 from datetime import datetime
+from distutils.util import execute
+
 from .database import Irepoterdb
 
 
@@ -7,9 +9,9 @@ class Incident(Irepoterdb):
     def __init__(self, created_by=None, Type=None, location=None, image=None, video=None, comment=None):
         super().__init__()
         self.created_on = datetime.now().replace(second=0, microsecond=0)
-        self.created_by = created_by  # represents the user who created this record
+        self.created_by = created_by
         self.Type = Type
-        self.location = location  # Lat Long coordinates
+        self.location = location
         self.status = "draft"
         self.image = image
         self.video = video
@@ -42,7 +44,7 @@ class Incident(Irepoterdb):
         cur.close()
 
     def add(self):
-        '''add a user to user table'''
+        '''add an incident to incident table'''
         cur = self.conn.cursor()
         cur.execute(
             '''INSERT INTO incidents(created_on, created_by, Type, location, status, image, video, comment) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)''',
@@ -66,8 +68,8 @@ class Incident(Irepoterdb):
             comment=self.comment
         )
 
-    def objectify_user(self, data):
-        ''' maps user '''
+    def objectify_incident(self, data):
+        ''' maps incident  '''
         self.id = data[0]
         self.created_on = data[1]
         self.created_by = data[2]
@@ -79,3 +81,27 @@ class Incident(Irepoterdb):
         self.comment = data[8]
 
         return self
+
+    def get_by_id(self, _id):
+        ''' get incident by id '''
+        cur = self.conn.cursor()
+        cur.execute(
+            "SELECT * FROM incidents where id = %s", (_id, ))
+        incident = cur.fetchone()
+
+        cur.close()
+
+        if incident:
+            return self.objectify_incident(incident)
+        return None
+
+    def get_all_incidents(self):
+        ''' get all incidents '''
+        cur = self.conn.cursor()
+        cur.execute("SELECT * FROM incidents")
+        incidents = cur.fetchall()
+        cur.close()
+
+        if incidents:
+            return (self.objectify_incident(incident) for incident in incidents)
+            return None
