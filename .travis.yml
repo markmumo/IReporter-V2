@@ -1,15 +1,19 @@
 language: python
 
-python:
-  - "3.6"
+python: - "3.6"
 
 services: -postgresql
+
+addons:
+  postgresql: "9.5"
 
 install:
   - pip install -r requirements.txt
   - pip install coveralls codecov
 
-before_script: -psql -c "CREATE DATABASE ireportertestdb;" -U postgres
+before_script:
+-psql -c "CREATE DATABASE ireportertestdb;" -U postgres
+- psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to postgres;" -U postgres
 script:
   - nosetests --with-coverage --cover-package=app
 
