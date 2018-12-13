@@ -1,14 +1,17 @@
 # IReporter-API
 
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
+<<<<<<< HEAD
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/52f19a52e9ba44a2974515c87c29f0dd)](https://app.codacy.com/app/markmumo/IReporter-V2?utm_source=github.com&utm_medium=referral&utm_content=markmumo/IReporter-V2&utm_campaign=Badge_Grade_Dashboard)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/24f3c19789c64cea904d6ac5155119f4)](https://app.codacy.com/app/markmumo/IReporter-API?utm_source=github.com&utm_medium=referral&utm_content=markmumo/IReporter-API&utm_campaign=Badge_Grade_Dashboard)
+=======
+>>>>>>> [Chore #162412710] updated badges on  README.md
 [![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
-[![Build Status](https://travis-ci.org/markmumo/IReporter-API.svg?branch=develop)](https://travis-ci.org/markmumo/IReporter-API)
+[![Build Status](https://travis-ci.org/markmumo/IReporter-V2.svg?branch=develop)](https://travis-ci.org/markmumo/IReporter-V2)
 [![codecov](https://codecov.io/gh/markmumo/IReporter-API/branch/develop/graph/badge.svg)](https://codecov.io/gh/markmumo/IReporter-API)
 
-# IReporter-API
+# IReporter-V2
 
 iReporter is an app enables citizen to report any form of corruption.
 
@@ -34,7 +37,7 @@ iReporter is an app enables citizen to report any form of corruption.
 Clone the repository below
 
 ```
-git clone https://github.com/markmumo/IReporter-API
+git clone git@github.com:markmumo/IReporter-V2.git
 ```
 
 ### Create and activate a virtual environment
@@ -61,14 +64,14 @@ $ flask run
 
 | Method | Endpoint                  | Description                            | Roles       |
 | ------ | ------------------------- | -------------------------------------- | ----------- |
-| POST   | /api/v1/auth/Sign_up      | register a user.                       | User        |
-| POST   | /api/v1/auth/Sign_in      | login a user.                          | User        |
-| GET    | /api/v1/users             | get all users.                         | Admin       |
-| POST   | /api/v1/incident          | create an incident record.             | User        |
-| GET    | /api/v1/incident          | Get all incident records.              | Admin/users |
-| GET    | /api/v1/incident/<int:id> | Get a specific incident.               | Admin/users |
-| PATCH  | /api/v1/incident/<int:id> | Edit a specific incident field by. id. | Admin/users |
-| DELETE | /api/v1/incident/<int:id> | Delete a specific incident by id.      | Admin/users |
+| POST   | /api/v2/auth/Sign_up      | register a user.                       | User        |
+| POST   | /api/v2/auth/Sign_in      | login a user.                          | User        |
+| GET    | /api/v2/users             | get all users.                         | Admin       |
+| POST   | /api/v2/incident          | create an incident record.             | User        |
+| GET    | /api/v2/incident          | Get all incident records.              | Admin/users |
+| GET    | /api/v2/incident/<int:id> | Get a specific incident.               | Admin/users |
+| PUT    | /api/v2/incident/<int:id> | Edit a specific incident field by. id. | Admin/users |
+| DELETE | /api/v2/incident/<int:id> | Delete a specific incident by id.      | Admin/users |
 
 ### Testing
 
