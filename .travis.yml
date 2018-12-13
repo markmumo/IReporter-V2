@@ -3,10 +3,13 @@ language: python
 python:
   - "3.6"
 
+services: -postgresql
+
 install:
   - pip install -r requirements.txt
   - pip install coveralls codecov
 
+before_script: -psql -c "CREATE DATABASE ireportertestdb;" -U postgres
 script:
   - nosetests --with-coverage --cover-package=app
 
