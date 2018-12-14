@@ -1,11 +1,7 @@
 # IReporter-V2
 
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
-<<<<<<< HEAD
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/52f19a52e9ba44a2974515c87c29f0dd)](https://app.codacy.com/app/markmumo/IReporter-V2?utm_source=github.com&utm_medium=referral&utm_content=markmumo/IReporter-V2&utm_campaign=Badge_Grade_Dashboard)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/24f3c19789c64cea904d6ac5155119f4)](https://app.codacy.com/app/markmumo/IReporter-API?utm_source=github.com&utm_medium=referral&utm_content=markmumo/IReporter-API&utm_campaign=Badge_Grade_Dashboard)
-=======
->>>>>>> [Chore #162412710] updated badges on  README.md
 [![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
 [![Build Status](https://travis-ci.org/markmumo/IReporter-V2.svg?branch=develop)](https://travis-ci.org/markmumo/IReporter-V2)
