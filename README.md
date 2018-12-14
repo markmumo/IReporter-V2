@@ -1,4 +1,4 @@
-# IReporter-API
+# IReporter-V2
 
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
 <<<<<<< HEAD
