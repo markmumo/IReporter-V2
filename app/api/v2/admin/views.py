@@ -1,19 +1,42 @@
+from functools import wraps
 from flask import Flask
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended.view_decorators import jwt_required
 from flask_restful import Resource, reqparse
-from app.api.v2.models.incidents import Incident, incidents
-from app.api.v2.models.users import User, Users
+
+from app.api.v2.models import incidents
+from app.api.v2.models.incidents import Incident
+from app.api.v2.models.users import User
+from utils import validators
+
+
+def admin_only(f):
+    ''' Restrict access if not admin '''
+    @wraps(f)
+    def wrapper_function(*args, **kwargs):
+        user = User().get_user_by_username(get_jwt_identity()["username"])
+        if not user.is_admin:
+            return {'message': 'Unauthorized access, you must be an admin to update this Incident records'}, 401
+        return f(*args, **kwargs)
+    return wrapper_function
 
 
 class Incidents(Resource):
     def get(self):
-        return {"Incidents": [incident.serializer() for incident in incidents]}
+        ''' get all incidents by admin '''
+
+        incidents = Incident().get_all_incidents()
+
+        if not incidents:
+            return {"message": "Incidents not found"}, 404
+
+        return {"Incidents": [incident.serializer() for incident in incidents]}, 200
 
 
-""" get incidents by id """
-
-
-class Get_incident_by_id(Resource):
-    parsing = reqparse.RequestParser()
+class Admin_Get_incident_by_id(Resource):
+    ''' get incidents by id '''
+    parser = reqparse.RequestParser()
+    parser.add_argument("status", type=str, required=True)
 
     def get(self, id):
         incident = Incident().get_incident_by_id(id)
@@ -23,58 +46,22 @@ class Get_incident_by_id(Resource):
             return {"Incident": incident.serializer()}
     """ change incidents status """
 
+    @jwt_required
+    @admin_only
     def patch(self, id):
 
-        data = Get_incident_by_id.parsing.parse_args()
+        data = Admin_Get_incident_by_id.parser.parse_args()
 
-        created_by = data['created_by']
-        Type = data['Type']
-        location = data['location']
         status = data['status']
-        image = data['image']
-        comment = data['comment']
 
-        specific_incident = Incident().get_incident_by_id(id)
+        specific_incident = Incident().get_by_id(id)
 
         if not specific_incident:
             return {"message": "This incident does not exist"}, 404
-        else:
-            specific_incident.created_by = created_by
-            specific_incident.Type = Type
-            specific_incident.location = location
-            specific_incident.status = status
-            specific_incident.image = image
-            specific_incident.comment = comment
 
-            return {"Incident": specific_incident.serializer()}, 200
+        if specific_incident.status == 'draft':
+            return {"message": " "}, 404
 
+        specific_incident.update_status(status, id)
 
-""" get all registered users """
-
-
-class All_users(Resource):
-    def get(self):
-        return {"Users": [user.serialize() for user in Users]}
-
-
-""" get users by their username """
-
-
-class Get_users_by_email(Resource):
-    def get(self, email):
-
-        user = User().get_user_by_email(email)
-        if user:
-            return {"User": user.serialize()}
-
-
-""" get users by the id """
-
-
-class Get_user_by_id(Resource):
-    def get(self, id):
-        user = User().get_user_by_id(id)
-        if not user:
-            return{"User does not exist"}
-        else:
-            return {"User": user.serialize()}
+        return {"Incident": specific_incident.serializer()}, 200
