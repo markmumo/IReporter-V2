@@ -1,3 +1,4 @@
+from flask_restful import Api
 from app.api.v2.admin.views import Admin_Get_incident_by_id, Incidents
 from app.api.v2.auth.views import Sign_in, Sign_up
 from app.api.v2.main.views import AllIncidents, Get_incident_by_id, \
@@ -5,6 +6,8 @@ from app.api.v2.main.views import AllIncidents, Get_incident_by_id, \
 
 
 def url(api):
+
+
     api.add_resource(PostIncidents, "/incident")
     '''GET all incidents'''
     api.add_resource(AllIncidents, "/incident")

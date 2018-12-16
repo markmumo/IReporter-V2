@@ -18,6 +18,22 @@ def create_app(config_name):
 
     app.register_blueprint(api_blueprint, url_prefix="/api/v2")
 
+
+    from app.api.v2.admin import admin_blueprint as admin_blp
+    admin = Api(admin_blp)
+    app.register_blueprint(admin_blp, url_prefix="/api/v2")
+
+
+    from app.api.v2.auth import auth_blueprint as auth_blp
+    auth = Api(auth_blp)
+    app.register_blueprint(auth_blp, url_prefix="/api/v2")
+
+
+    from app.api.v2.main import views_blueprint as views_blp
+    user = Api(views_blp)
+    app.register_blueprint(views_blp, url_prefix="/api/v2")
+    
+
     url(api)
 
     return app
