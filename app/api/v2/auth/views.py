@@ -14,8 +14,10 @@ from werkzeug.security import check_password_hash
 class Sign_in(Resource):
     parser = reqparse.RequestParser()
 
-    parser.add_argument('username', type=str, required=True)
-    parser.add_argument('password', type=str, required=True)
+    parser.add_argument('username', type=str, required=True,
+                        help="This field can not be blank")
+    parser.add_argument('password', type=str, required=True,
+                        help="This field can not be blank")
 
     def post(self):
         data = Sign_in.parser.parse_args()
@@ -30,11 +32,10 @@ class Sign_in(Resource):
         if not check_password_hash(user.password, password):
             return {'message': 'incorrect password'}, 401
 
-        expires = datetime.timedelta(minutes=30)
+        expires = datetime.timedelta(minutes=60)
         token = create_access_token(
             identity=user.serialize(), expires_delta=expires)
-        return {'token': token, 'message': 'successfully logged'}, 200
-
+        return {'Status': '200', 'token': token, 'User': f'{username}', 'Message': 'successfully logged in'}, 200
 
 
 class Sign_up(Resource):
@@ -59,9 +60,9 @@ class Sign_up(Resource):
         username = data['username']
 
         if not Validate.validate_username(username):
-            return {"Message": "username can only contain alphanumeric characters only and a minimum of 4 characters"}, 400
+            return {"Message": "username must be a string"}, 400
         if not Validate.validate_phone_number(phoneNumber):
-            return {"Message": "please put valid phone number"}, 400
+            return {"Message": "please put a valid phone number"}, 400
 
         if not Validate.validate_email(email):
             return {"message": "Please enter valid email"}, 400
@@ -75,33 +76,12 @@ class Sign_up(Resource):
         if not Validate.validate_password(password):
             return {"Message": "Password must be at least 8 characters"}, 400
         if User().get_user_by_email(email):
-            return {"Message": "email adress already taken"}, 400
+            return {"Message": f"{email} email address already taken,please try another"}, 400
         if User().get_user_by_username(username):
             return {"Message": f"{username} already taken, please try another"}, 400
 
         user = User(firstname, lastname, othernames, email, password,
                     phoneNumber, username)
         user.add()
-        return {"Message": f"{user.username} created successfully"}, 201
+        return {'Status': '201', 'User': f'{data}', 'Message': 'created successfully'}, 201
 
-
-class All_users(Resource):
-    def get(self):
-        return {"Users": [user.serialize() for user in Users]}
-
-
-class Get_users_by_email(Resource):
-    def get(self, email):
-
-        user = User().get_user_by_email(email)
-        if user:
-            return {"User": user.serialize()}
-
-
-class Get_user_by_id(Resource):
-    def get(self, id):
-        user = User().get_user_by_id(id)
-        if not user:
-            return{"User does not exist"}
-        else:
-            return {"User": user.serialize()}

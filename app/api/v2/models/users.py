@@ -93,10 +93,6 @@ class User(Irepoterdb):
         cur.execute('''SELECT * FROM users WHERE username=%s''',
                     (username, ))
         user = cur.fetchone()
-
-        self.conn.commit()
-        cur.close()
-
         if user:
             return self.objectify_user(user)
         return None
