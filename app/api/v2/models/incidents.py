@@ -107,6 +107,19 @@ class Incident(Irepoterdb):
             return (self.objectify_incident(incident) for incident in incidents)
             return None
 
+    def get_by_requester(self, requester):
+        """ get all orders made by the requester """
+        cur = self.conn.cursor()
+        cur.execute(
+            """ SELECT *  FROM incidents WHERE created_by =%s """, (requester, ))
+
+        incidents = cur.fetchall()
+        cur.close()
+
+        if incidents:
+            return (self.objectify_incident(incident) for incident in incidents)
+        return None
+
     def delete(self, incident_id):
         """ delete incident """
         cur = self.conn.cursor()
@@ -121,5 +134,16 @@ class Incident(Irepoterdb):
         cur.execute(
             """ UPDATE incidents SET Type= %s, location= %s, image= %s, video= %s, comment= %s WHERE id = %s """, (
                 self.Type, self.location, self.image, self.video, self.comment, incident_id)
+        )
+        self.conn.commit()
+
+    def update_status(self, status, id):
+        """
+        update status of an incident
+        """
+        cur = self.conn.cursor()
+        cur.execute(
+            """ UPDATE incidents SET status= %s WHERE id = %s """, (
+                status, id)
         )
         self.conn.commit()
