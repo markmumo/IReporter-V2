@@ -61,12 +61,19 @@ class TestIncident(BaseTest):
             headers={'content-type': 'application/json',
                      'Authorization': f'Bearer {token}'}
         )
+
         return response
 
     def test_get_incidents(self):
         '''Test get incident'''
         self.post_incident()
-        response = self.client.get("/api/v2/incident")
+
+        token = self.get_jwt_token_as_admin()
+
+        response = self.client.get("/api/v2/all/incidents",
+                                   headers={'content-type': 'application/json',
+                                            'Authorization': f'Bearer {token}'}
+                                   )
         self.assertEqual(response.status_code, 200)
 
     def test_get_incident_by_id(self):
@@ -111,12 +118,13 @@ class TestIncident(BaseTest):
 
         self.post_incident()
 
-        response = self.client.put(
+        response = self.client.patch(
             "/api/v2/incident/1",
             data=json.dumps(self.edit_data),
             headers={'content-type': 'application/json',
                      'Authorization': f'Bearer {token}'}
         )
+        print(response.data)
         self.assertEqual(response.status_code, 200)
 
     def test_invalid_username(self):
@@ -128,7 +136,7 @@ class TestIncident(BaseTest):
             headers={'content-type': 'application/json'}
         )
         self.assertEqual(json.loads(response.data)[
-                         "Message"], "username can only contain alphanumeric characters only and a minimum of 4 characters")
+                         "Message"], "username must be a string")
         self.assertEqual(response.status_code, 400)
 
     def test_existing_username(self):
