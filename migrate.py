@@ -12,9 +12,9 @@ class Tables:
         User().create_table()
         Incident().create_table()
 
-    def drop(self):
-        User().drop_table()
-        Incident().drop_table()
+    # def drop(self):
+    #     User().drop_table()
+    #     Incident().drop_table()
 
     def create_admin(self):
         admin = User(firstname='Admin', lastname='irepoter', othernames='name', email='admin@gmail.com',
@@ -24,6 +24,6 @@ class Tables:
 
 if __name__ == '__main__':
     with app.app_context():
-        Tables().drop()
+        # Tables().drop()
         Tables().create()
         Tables().create_admin()

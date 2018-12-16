@@ -22,6 +22,9 @@ def admin_only(f):
 
 
 class Incidents(Resource):
+
+    @jwt_required
+    @admin_only
     def get(self):
         ''' get all incidents by admin '''
 
