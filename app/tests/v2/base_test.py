@@ -1,5 +1,6 @@
 from unittest import TestCase
 from migrate import Tables
+from app.api.v2.models.database import Irepoterdb
 import json
 from app import create_app
 
@@ -13,6 +14,7 @@ class BaseTest(TestCase):
         self.client = app.test_client()
         self.app_context = app.app_context()
         with self.app_context:
+            Irepoterdb().init_app(app)
             Tables.drop(self)
             Tables.create(self)
             Tables.create_admin(self)
