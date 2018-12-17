@@ -17,7 +17,7 @@ class Incident(Irepoterdb):
         self.video = video
         self.comment = comment
 
-    def create_table(self):
+    def create_table_incidents(self):
         cur = self.conn.cursor()
         cur.execute(
             '''
@@ -37,7 +37,7 @@ class Incident(Irepoterdb):
         self.conn.commit()
         cur.close()
 
-    def drop_table(self):
+    def drop_table_incidents(self):
         cur = self.conn.cursor()
         cur.execute('DROP TABLE IF EXISTS incidents')
         self.conn.commit()
