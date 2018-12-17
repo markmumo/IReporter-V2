@@ -18,7 +18,7 @@ class User(Irepoterdb):
         self.username = username
         self.is_admin = is_admin
 
-    def create_table(self):
+    def create_table_users(self):
         cur = self.conn.cursor()
         cur.execute(
             '''
@@ -38,7 +38,7 @@ class User(Irepoterdb):
         self.conn.commit()
         cur.close()
 
-    def drop_table(self):
+    def drop_table_users(self):
         cur = self.conn.cursor()
         cur.execute('DROP TABLE IF EXISTS users')
         self.conn.commit()

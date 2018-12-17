@@ -9,12 +9,12 @@ from run import app
 
 class Tables:
     def create(self):
-        User().create_table()
-        Incident().create_table()
+        User().create_table_users()
+        Incident().create_table_incidents()
 
     def drop(self):
-        User().drop_table()
-        Incident().drop_table()
+        User().drop_table_users()
+        Incident().drop_table_incidents()
 
     def create_admin(self):
         admin = User(firstname='Admin', lastname='irepoter', othernames='name', email='admin@gmail.com',
